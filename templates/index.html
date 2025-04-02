@@ -1,0 +1,77 @@
+{% extends "layout.html" %}
+{% block nav %}
+<div class="navbar">
+    <a href="{% url 'mainpage' %}" class="website-link">
+        <span class="website-name">DigitalDen</span>
+    </a>
+    <div>
+        {% if user.is_authenticated %}
+            <a href="{% url "cartpage" %}">Cart</a>
+            <a href="{% url "myorders" %}">My Orders</a>
+            {% if user.user_type == 'seller' %}
+            <a href={% url "addstore" %}>Add Store</a>
+            <a href="{% url 'sellerorder' %}">Orders</a>
+            {% endif %}
+            <a href="{% url 'logout' %}">Logout</a>
+
+        {% else %}
+            {% comment %} <a href="{% url 'loginpage' %}">Sign In</a>
+            <a href="{% url 'registerpage' %}">Sign Up</a> {% endcomment %}
+        {% endif %}
+    </div>
+</div>
+
+{% endblock nav %}
+
+{% block content %}
+{% if user.is_authenticated %}
+<div style="background-color: #232f3e; background-image: url('hero-background.jpg'); background-size: cover; background-position: center; height: 100vh; position: relative; overflow: hidden;">
+    <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; z-index: 1;">
+        <h1 style="font-size: 5rem; color: #fff; margin-bottom: 30px; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);">Welcome to <span style="color: #00ffd4;">DigitalDen</span></h1>
+        <p style="font-size: 2rem; color: #fff; margin-bottom: 40px;">Embark on a digital odyssey like never before.</p>
+        <div style="margin-bottom: 40px;">
+            <a href="{% url 'storepage' %}" style="background-color: #00ffd4; color: #fff; padding: 20px 50px; border-radius: 50px; text-decoration: none; font-size: 1.5rem; transition: background-color 0.3s; margin-right: 30px;">Start Exploring</a>
+            
+        </div>
+    </div>
+    <div style="position: absolute; bottom: -150px; right: -150px; width: 600px; height: 600px; background-color: rgba(255, 255, 255, 0.2); border-radius: 50%; z-index: 0; animation: float 20s infinite alternate;"></div>
+    <svg viewBox="0 0 500 150" preserveAspectRatio="none" style="position: absolute; bottom: 0; left: 0; width: 100%; height: 100px; z-index: 0;">
+        <path d="M0.00,49.98 C149.99,150.00 350.99,150.00 500.00,49.98 L500.00,150.00 L0.00,150.00 Z" style="stroke: none; fill: #00ffd4;"></path>
+    </svg>
+    
+</div>
+
+<style>
+    body {
+        overflow: hidden;
+    }
+</style>
+
+
+{% else %}
+<div style="background-color: #232f3e; background-image: url('hero-background.jpg'); background-size: cover; background-position: center; height: 100vh; position: relative; overflow: hidden;">
+    <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; z-index: 1;">
+        <h1 style="font-size: 5rem; color: #fff; margin-bottom: 30px; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);">Welcome to <span style="color: #00ffd4;">DigitalDen</span></h1>
+        <p style="font-size: 2rem; color: #fff; margin-bottom: 40px;">Embark on a digital odyssey like never before.</p>
+        <div style="margin-bottom: 40px;">
+            <a href="{% url 'storepage' %}" style="background-color: #00ffd4; color: #fff; padding: 20px 50px; border-radius: 50px; text-decoration: none; font-size: 1.5rem; transition: background-color 0.3s; margin-right: 30px;">Start Exploring</a>
+            <a href="{% url 'registerpage' %}" style="background-color: #fff; color: #00ffd4; padding: 20px 50px; border-radius: 50px; text-decoration: none; font-size: 1.5rem; transition: background-color 0.3s;">Join Now</a>
+        </div>
+        <p style="font-size: 1.5rem; color: #fff;">Already a member? <a href="{% url 'loginpage' %}" style="color: #00ffd4; text-decoration: none;">Sign in here</a>.</p>
+    </div>
+    <div style="position: absolute; bottom: -150px; right: -150px; width: 600px; height: 600px; background-color: rgba(255, 255, 255, 0.2); border-radius: 50%; z-index: 0; animation: float 20s infinite alternate;"></div>
+    <svg viewBox="0 0 500 150" preserveAspectRatio="none" style="position: absolute; bottom: 0; left: 0; width: 100%; height: 100px; z-index: 0;">
+        <path d="M0.00,49.98 C149.99,150.00 350.99,150.00 500.00,49.98 L500.00,150.00 L0.00,150.00 Z" style="stroke: none; fill: #00ffd4;"></path>
+    </svg>
+    
+</div>
+
+<style>
+    body {
+        overflow: hidden;
+    }
+</style>
+
+{% endif %}
+
+{% endblock content %}

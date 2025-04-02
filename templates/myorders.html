@@ -1,0 +1,80 @@
+{% extends "layout.html" %}
+
+{% block nav %}
+<div class="navbar">
+    <a href="{% url 'mainpage' %}" class="website-link">
+        <span class="website-name">DigitalDen</span>
+    </a>
+    <div>
+        {% if user.is_authenticated %}
+            <a href="storepage">Store</a>
+            <a href="{% url "cartpage" %}">Cart</a>
+            <a href="{% url "myorders" %}">My Orders</a>
+            {% if user.user_type == 'seller' %}
+            <a href={% url "addstore" %}>Add Store</a>
+            <a href="{% url 'sellerorder' %}">Orders</a>
+            {% endif %}
+            <a href="{% url 'logout' %}">Logout</a>
+
+        {% else %}
+            <a href="{% url 'loginpage' %}">Sign In</a>
+            <a href="{% url 'registerpage' %}">Sign Up</a>
+        {% endif %}
+    </div>
+</div>
+
+{% endblock nav %}
+
+{% block content %}
+<style>
+.cart-item {
+    border: 1px solid #ccc;
+    margin-bottom: 10px;
+    padding: 10px;
+    background-color: #f9f9f9;
+}
+
+.cart-item h1 {
+    font-size: 1.2em;
+    margin-bottom: 5px;
+}
+.product-image {
+    width: 8cm;
+    height: 8cm;
+    object-fit: cover; 
+    border-radius: 10px; 
+}
+
+.cart-item button {
+    background-color: #ff0000;
+    color: #fff;
+    border: none;
+    padding: 2px 4px; /* Adjust padding to make the button smaller */
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    width:80px;
+}
+
+.quantity-input {
+    width: 40px;
+    text-align: center;
+}
+</style>
+
+<h1>Your Orders</h1>
+{% for order in my_order  %}
+<h1>Name Of Product : {{order.product}}</h1>
+<h3>Price : {{order.total_price}}</h3>
+<h3>Quantity : {{order.quantity}}</h3>
+<h4>Delivery Address : {{order.person_address}}{{order.person_landmark}} {{order.person_city}} {{order.person_state}} {{order.person_postalcode}}</h4>
+<p>Placed On : {{order.created_at}}</p>
+<p>Status : <span style="color: {% if order.status == 'pending' %}red{% else %}green{% endif %};">{{order.status}}</span></p>
+<hr>
+{% endfor %}
+
+
+{% endblock content %}

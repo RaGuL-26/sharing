@@ -1,0 +1,102 @@
+{% extends "layout.html" %}
+
+{% block nav %}
+<style>
+    .product-image {
+        width: 8cm;
+        height: 8cm;
+        object-fit: cover; 
+        border-radius: 10px; 
+    }
+    form {
+        float: left; 
+    }
+    textarea {
+        width: 200px; 
+        height: 100px; 
+    }
+    .content-block {
+        padding-left: 20px; 
+    }
+    select {
+        width: 200px;  
+    }
+    button{
+        width:200px;
+    }
+    .review-box {
+        border: 1px solid #ccc;
+        padding: 10px;
+        margin-bottom: 20px;
+        border-radius: 5px;
+        background-color: #f9f9f9;
+        width:30%
+    }
+
+</style>
+<div class="navbar">
+    <a href="{% url 'mainpage' %}" class="website-link">
+        <span class="website-name">DigitalDen</span>
+    </a>
+    <div>
+        {% if user.is_authenticated %}
+            <a href="storepage">Store</a>
+            <a href="{% url "cartpage" %}">Cart</a>
+            <a href="{% url "myorders" %}">My Orders</a>
+            {% if user.user_type == 'seller' %}
+            <a href={% url "addstore" %}>Add Store</a>
+            <a href="{% url 'sellerorder' %}">Orders</a>
+            {% endif %}
+            <a href="{% url 'logout' %}">Logout</a>
+
+        {% else %}
+            <a href="{% url 'loginpage' %}">Sign In</a>
+            <a href="{% url 'registerpage' %}">Sign Up</a>
+        {% endif %}
+    </div>
+</div>
+
+{% endblock nav %}
+
+{% block content %}
+
+<div class="content-block">
+    <h1>{{product_detail.name}}</h1>
+    <img src="{{ product_detail.image_of_product.url }}" alt="image-of-product" class="product-image">
+    <h3>Price : {{product_detail.price}} /-</h3>
+    <p>Color : {{product_detail.color}}</p>
+    <p>brand : {{product_detail.brand}}</p>
+
+    <p>{{product_detail.description}}</p>
+
+    <form action="{% url "addtocart" product_detail.slug %}" method="post">
+        {% csrf_token %}
+        <input type="number" id="quantity" name="quantity" value="1" min="1">
+        <button type="submit">Add to Cart</button>
+    </form>
+    
+    
+    <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+    <h2>Reviews ⭐</h2>
+    
+    {% if reviews %}
+    {% for review in reviews %}
+        <div class="review-box">
+            <h4>Posted By: <mark>{{ review.user.username }}</mark></h4>
+            <h4>{{ review.product_review }}</h4>
+            <p>{{ review.text }}</p>
+            <h5>{{ review.created_at }}</h5>
+        </div>
+    {% endfor %}
+    {% else %}
+        <p>No reviews yet.</p>
+    {% endif %}
+
+
+    <form action="{% url "productpage" product_detail.slug%}" method='post'>
+        {% csrf_token %}
+        {{form}}
+        <button>submit</button>
+    </form>
+</div>
+{% endblock content %}

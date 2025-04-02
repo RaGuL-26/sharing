@@ -1,0 +1,66 @@
+{% extends "layout.html" %}
+
+{% block nav %}
+<div class="navbar">
+    <a href="{% url 'mainpage' %}" class="website-link">
+        <span class="website-name">DigitalDen</span>
+    </a>
+    <div>
+        {% if user.is_authenticated %}
+            <a href="storepage">Store</a>
+            <a href="{% url "cartpage" %}">Cart</a>
+            <a href="{% url "myorders" %}">My Orders</a>
+            {% if user.user_type == 'seller' %}
+            <a href={% url "addstore" %}>Add Store</a>
+            <a href="{% url 'sellerorder' %}">Orders</a>
+            {% endif %}
+            <a href="{% url 'logout' %}">Logout</a>
+
+        {% else %}
+            <a href="{% url 'loginpage' %}">Sign In</a>
+            <a href="{% url 'registerpage' %}">Sign Up</a>
+        {% endif %}
+    </div>
+</div>
+
+{% endblock nav %}
+
+{% block content %}
+<style>
+
+
+
+</style>
+<h1>Your Orders</h1>
+{% for order in seller_orders %}
+<div>
+    <h2>Name:{{ order.user }}</h2>
+    <h3>Product Name:{{ order.product }}</h3>
+    <p>Quantity:{{order.quantity}}</p>
+    <p>Total price : {{order.total_price}}</p>
+    <h1>Address</h1>
+    <address>
+    <p>Street : {{order.person_address}}</p>
+    <p>landmark : {{order.person_landmark}}</p>
+    <p>City : {{order.person_city}}</p>
+    <p>State : {{order.person_state}}</p>
+    <p>Postal Code : {{order.person_postalcode}}</p>
+</address>
+    <p>Order Placed At :{{order.created_at}}</p>
+    <form method="post" action="{% url 'updatestatus' %}">
+        {% csrf_token %}
+        <input type="hidden" name="order_id" value="{{ order.id }}">
+        <select name="status">
+            <option value="pending" {% if order.status == 'pending' %} selected {% endif %}>Pending</option>
+            <option value="accepted" {% if order.status == 'accepted' %} selected {% endif %}>Accepted</option>
+        </select>
+        <button type="submit">Update Status</button>
+
+    </form>
+    <hr>
+</div>
+{% endfor %}
+
+
+
+{% endblock content %}

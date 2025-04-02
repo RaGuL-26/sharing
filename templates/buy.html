@@ -1,0 +1,56 @@
+{% extends "layout.html" %}
+
+{% block nav %}
+<div class="navbar">
+    <a href="{% url 'mainpage' %}" class="website-link">
+        <span class="website-name">DigitalDen</span>
+    </a>
+    <div>
+        {% if user.is_authenticated %}
+            <a href="storepage">Store</a>
+            <a href="{% url "cartpage" %}">Cart</a>
+            <a href="{% url "myorders" %}">My Orders</a>
+            {% if user.user_type == 'seller' %}
+            <a href={% url "addstore" %}>Add Store</a>
+            <a href="{% url 'sellerorder' %}">Orders</a>
+            {% endif %}
+            <a href="{% url 'logout' %}">Logout</a>
+
+        {% else %}
+            <a href="{% url 'loginpage' %}">Sign In</a>
+            <a href="{% url 'registerpage' %}">Sign Up</a>
+        {% endif %}
+    </div>
+</div>
+
+{% endblock nav %}
+
+{% block content %}
+
+<div class="content-block">
+    <h2>Add or Select Address</h2>
+    {% if user_addresses %}
+        <form action="{% url 'confirmpage' product.slug %}" method="post">
+            {% csrf_token %}
+            <label for="address_id">Select Address:</label>
+            <select name="address_id" id="address">
+                {% for address in user_addresses %}
+                    <option value="{{ address.id }}">{{ address.street_address }}, {{ address.city }}, {{ address.state }}, {{ address.postal_code }}</option>
+                {% endfor %}
+            </select>
+            <button type="submit">Proceed to Payment</button>
+        </form>
+    {% else %}
+        <p>No saved addresses. Please add an address below.</p>
+    {% endif %}
+    
+    <hr>
+    
+    <h3>Add New Address</h3>
+    <form action="{% url 'buypage' product.slug %}" method="post">
+        {% csrf_token %}
+        {{ address_form.as_p }}
+        <button type="submit">Save Address</button>
+    </form>
+</div>
+{% endblock content %}

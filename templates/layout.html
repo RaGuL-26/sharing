@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    {% block title %}
+    <title> </title>
+    {% endblock title %}
+</head>
+<body>
+    {% block nav %}
+
+    {% endblock nav %}
+
+    {% if messages %}
+        <ul class="messages">
+    {% for message in messages %}
+        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+    {% endfor %}
+        </ul>
+    {% endif %}
+    
+    <main style="margin-bottom: 200px; padding-bottom: 100px"> 
+        {% block content %}
+    
+        {% endblock content %}
+    </main>
+
+
+    {% block foot %}
+    <div class="footer" style="position: fixed; bottom: 0; width: 100%; background-color: #232f3e; color: white; text-align: center; padding: 10px;">
+        <p class="copyright">&copy; 2024 Ragul. All rights reserved.</p>
+    </div>
+    {% endblock foot %}
+    
+   
+
+</body>
+</html>

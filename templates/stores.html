@@ -1,0 +1,110 @@
+{% extends "layout.html" %}
+
+{% block nav %}
+<div class="navbar">
+    <a href="{% url 'mainpage' %}" class="website-link">
+        <span class="website-name">DigitalDen</span>
+    </a>
+    <div>
+        {% if user.is_authenticated %}
+            <a href="storepage">Store</a>
+            <a href="{% url "cartpage" %}">Cart</a>
+            <a href="{% url "myorders" %}">My Orders</a>
+            {% if user.user_type == 'seller' %}
+            <a href={% url "addstore" %}>Add Store</a>
+            <a href="{% url 'sellerorder' %}">Orders</a>
+            {% endif %}
+            <a href="{% url 'logout' %}">Logout</a>
+
+        {% else %}
+            <a href="{% url 'loginpage' %}">Sign In</a>
+            <a href="{% url 'registerpage' %}">Sign Up</a>
+        {% endif %}
+    </div>
+</div>
+
+{% endblock nav %}
+
+{% block content %}
+<style>
+    .content {
+        padding: 20px;
+    }
+
+    .product-card {
+        border: 2px solid #555;
+        border-radius: 10px;
+        padding: 10px;
+        text-align: center;
+    }
+
+    .product-image {
+        width: 8cm;
+        height: 8cm;
+        object-fit: cover;
+        border-radius: 10px;
+    }
+
+    .product-name a {
+        font-size: 2rem;
+        color: #333;
+        font-weight: bold;
+        text-decoration: none;
+        color: #232f3e;
+        transition: color 0.3s; /* Smooth transition effect */
+    }
+
+    .product-name a:hover {
+        color: #ff9900; /* Change text color to white on hover */
+    }
+
+    /* Animation */
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+        }
+        to {
+            opacity: 1;
+        }
+    }
+
+    .product-name a {
+        animation: fadeIn 0.5s ease-in-out; /* Apply fadeIn animation */
+    }
+</style>
+
+<form method="GET" action="{% url 'storepage' %}" class="search-form">
+    <select name="q">
+        <option value="">Select product type...</option>
+        <option value="all">All</option>
+        <option value="Electronics">Electronics</option>
+        <option value="Clothing">Clothing</option>
+        <option value="Books">Books</option>
+        <option value="Furniture">Furniture</option>
+        <option value="Kitchen">Kitchen</option>
+        <option value="Beauty">Beauty</option>
+        <option value="Sports">Sports</option>
+        <option value="Toys">Toys</option>
+        <option value="Phones">Phones</option>
+        <option value="Computers">Computers</option>
+        <option value="others">Others</option>
+    </select>
+    <input type="submit" value="Search">
+</form>
+<br><br>
+<div class="content">
+    <div class="product-grid" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;">
+        {% for store in store_details %}
+        <div class="product-card">
+            <img src="{{ store.image_of_product.url }}" alt="image-of-product" class="product-image">
+            <h1 class="product-name">
+                <a href="{% url "productpage" store.slug %}" class="product-link">{{ store.name }}</a>
+            </h1>
+            
+            <p>Price:{{store.price}}/-</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock content %}
